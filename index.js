@@ -27,6 +27,7 @@ class Sprite {
     }
     this.color = color
     this.isAttacking
+    this.health = 100;
   };
 
   draw() {
@@ -90,6 +91,11 @@ const keys  = {
   },
 };
 
+function punchCollision({rectangle1, rectangle2}) {
+  return (
+    rectangle1.attackBox.position.x + rectangle1.attackBox.width >= rectangle2.position.x && rectangle1.attackBox.position.x <= rectangle2.position.x + rectangle2.width && rectangle1.attackBox.position.y + rectangle1.attackBox.height >= rectangle2.position.y && rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height && rectangle1.isAttacking)
+}
+
 function endlessFight() {
   window.requestAnimationFrame(endlessFight);
   context.fillStyle = '#000';
@@ -115,9 +121,18 @@ function endlessFight() {
   }
 
   // detect collision
-  if (Neo.attackBox.position.x + Neo.attackBox.width >= Smith.position.x && Neo.attackBox.position.x <= Smith.position.x + Smith.width && Neo.attackBox.position.y + Neo.attackBox.height >= Smith.position.y && Neo.attackBox.position.y <= Smith.position.y + Smith.height && Neo.isAttacking) {
+  if (punchCollision({rectangle1: Neo, rectangle2: Smith}) && Neo.isAttacking) {
     Neo.isAttacking = false;
-    console.log('collision');
+    Smith.health -= 10;
+    document.querySelector('#SmithHealth').style.width = Smith.health + '%';
+    console.log('Neo Hit Smith');
+  }
+
+  if (punchCollision({rectangle1: Smith, rectangle2: Neo}) && Smith.isAttacking) {
+    Smith.isAttacking = false;
+    Neo.health -= 10;
+    document.querySelector('#NeoHealth').style.width = Neo.health + '%';
+    console.log('Smith Hit Neo');
   }
 }
 
@@ -161,6 +176,7 @@ window.addEventListener('keydown', (event) => {
 });
 
 window.addEventListener('keyup', (event) => {
+  // console.log(event.key);
   switch (event.key) {
     // Neo Keys
     case 'a':
