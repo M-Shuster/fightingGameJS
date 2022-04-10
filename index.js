@@ -9,20 +9,42 @@ context.fillRect(0, 0, canvas.width, canvas.height);
 const gravity = 0.5;
 
 class Sprite {
-  constructor({ position, velocity }) {
+  constructor({ position, velocity, color, offset }) {
     this.position = position;
     this.velocity = velocity;
+    this.width = 50;
     this.height = 150;
-    this.lastKey 
+    this.lastKey
+    // add kicking to this later and change this to punch/sword attack
+    this.attackBox = {
+      position: {
+        x: this.position.x,
+        y: this.position.y,
+      },
+      offset,
+      width: 100,
+      height: 50,
+    }
+    this.color = color
+    this.isAttacking
+    this.health = 100;
   };
 
   draw() {
-    context.fillStyle = '#bbb';
-    context.fillRect(this.position.x, this.position.y, 50, this.height);
+    context.fillStyle = this.color;
+    context.fillRect(this.position.x, this.position.y, this.width, this.height);
+
+    // attack box drawn here
+    if (this.isAttacking) {
+      context.fillStyle = 'dodgerblue';
+      context.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
+    }
   }
 
   update() {
     this.draw();
+    this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
+    this.attackBox.position.y = this.position.y
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
 
@@ -31,16 +53,27 @@ class Sprite {
     } else 
     this.velocity.y += gravity;
   }
+
+  attack() {
+    this.isAttacking = true;
+    setTimeout(() => {
+      this.isAttacking = false;
+    }, 100);
+  }
 }
 
 const Neo = new Sprite({
   position: { x: 50, y: 0 },
-  velocity: { x: 0, y: 0 }
+  velocity: { x: 0, y: 0 },
+  color: 'LemonChiffon',
+  offset: { x: 0, y: 0 },
 });
 
 const Smith = new Sprite({
   position: { x: 924, y: 0 },
-  velocity: { x: 0, y: 0 }
+  velocity: { x: 0, y: 0 },
+  color: 'DarkSalmon',
+  offset: { x: -50, y: 0 },
 });
 
 const keys  = {
@@ -57,6 +90,11 @@ const keys  = {
     pressed: false,
   },
 };
+
+function punchCollision({rectangle1, rectangle2}) {
+  return (
+    rectangle1.attackBox.position.x + rectangle1.attackBox.width >= rectangle2.position.x && rectangle1.attackBox.position.x <= rectangle2.position.x + rectangle2.width && rectangle1.attackBox.position.y + rectangle1.attackBox.height >= rectangle2.position.y && rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height && rectangle1.isAttacking)
+}
 
 function endlessFight() {
   window.requestAnimationFrame(endlessFight);
@@ -81,6 +119,21 @@ function endlessFight() {
   } else if (keys.ArrowRight.pressed && Smith.lastKey === 'ArrowRight') {
     Smith.velocity.x = 5;
   }
+
+  // detect collision
+  if (punchCollision({rectangle1: Neo, rectangle2: Smith}) && Neo.isAttacking) {
+    Neo.isAttacking = false;
+    Smith.health -= 10;
+    document.querySelector('#SmithHealth').style.width = Smith.health + '%';
+    console.log('Neo Hit Smith');
+  }
+
+  if (punchCollision({rectangle1: Smith, rectangle2: Neo}) && Smith.isAttacking) {
+    Smith.isAttacking = false;
+    Neo.health -= 10;
+    document.querySelector('#NeoHealth').style.width = Neo.health + '%';
+    console.log('Smith Hit Neo');
+  }
 }
 
 endlessFight();
@@ -100,6 +153,9 @@ window.addEventListener('keydown', (event) => {
     case 'w':
       Neo.velocity.y = -20;
       break;
+    case 'r':
+      Neo.attack();
+      break;
 
       // Smith Keys
     case 'ArrowLeft':
@@ -113,10 +169,14 @@ window.addEventListener('keydown', (event) => {
     case 'ArrowUp':
       Smith.velocity.y = -20;
       break;
+    case '[':
+      Smith.attack();
+      break;
   }
 });
 
 window.addEventListener('keyup', (event) => {
+  // console.log(event.key);
   switch (event.key) {
     // Neo Keys
     case 'a':

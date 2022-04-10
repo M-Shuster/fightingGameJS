@@ -1,0 +1,67 @@
+* {
+  box-sizing: border-box;
+}
+
+#canvas {
+  position: relative;
+  display: inline-block;
+}
+
+#topBar {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+}
+
+#NeoHealthContainer {
+  position: relative;
+  height: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#NeoHealth {
+  position: absolute;
+  background-color: #0000ff;
+  height: 20px;
+  width: 100%;
+  margin-top: 5px;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+
+#gameTimer {
+  background-color: #ff0000;
+  height: 100px;
+  width: 100px;
+  flex-shrink: 0;
+}
+
+#SmithHealthContainer {
+  position: relative;
+  height: 30px;
+  width: 100%;
+}
+
+.healthBackground {
+  background-color: #ffff00;
+  height: 30px;
+  border-radius: 2px;
+  width: 100%;
+}
+
+#SmithHealth {
+  position: absolute;
+  background-color: #0000ff;
+  height: 20px;
+  width: 100%;
+  margin-top: 5px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
