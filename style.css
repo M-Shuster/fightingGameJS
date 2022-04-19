@@ -39,6 +39,9 @@
   height: 100px;
   width: 100px;
   flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #SmithHealthContainer {
