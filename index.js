@@ -15,7 +15,6 @@ class Sprite {
     this.width = 50;
     this.height = 150;
     this.lastKey
-    // add kicking to this later and change this to punch/sword attack
     this.swordBox = {
       position: {
         x: this.position.x,
