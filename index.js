@@ -123,12 +123,29 @@ function kickCollision({rectangle3, rectangle4}) {
     rectangle3.kickBox.position.x + rectangle3.kickBox.width >= rectangle4.position.x && rectangle3.kickBox.position.x <= rectangle4.position.x + rectangle4.width && rectangle3.kickBox.position.y + rectangle3.kickBox.height >= rectangle4.position.y && rectangle3.kickBox.position.y <= rectangle4.position.y + rectangle4.height && rectangle3.isKickAttacking)
 }
 
-let timer = 10;
+function determineWinner({Neo, Smith, timerId}) {
+  clearTimeout(timerId);
+  document.querySelector('#gameResult').style.display = 'flex';
+  if (Neo.health === Smith.health) {
+    document.querySelector('#gameResult').innerHTML = 'Tie, Nobody wins, try harder next time...';
+  } else if (Neo.health > Smith.health) {
+    document.querySelector('#gameResult').innerHTML = 'Neo wins';
+  } else if (Neo.health < Smith.health) {
+    document.querySelector('#gameResult').innerHTML = 'Smith wins';
+  }
+}
+
+let timer = 60;
+let timerId
 function decreaseTimer() {
-  setTimeout(decreaseTimer, 1000);
+  timerId = setTimeout(decreaseTimer, 1000);
   if (timer > 0) {
     timer --
     document.querySelector('#gameTimer').innerHTML = timer;
+  }
+
+  if (timer === 0) {
+    determineWinner ({Neo, Smith, timerId});
   }
 }
 
@@ -185,6 +202,11 @@ function endlessFight() {
     Neo.health -= 10;
     document.querySelector('#NeoHealth').style.width = Neo.health + '%';
     console.log('Smith Hit Neo');
+  }
+
+  // end game based on health
+  if (Neo.health <= 0 || Smith.health <= 0) {
+    determineWinner ({Neo, Smith, timerId});
   }
 }
 

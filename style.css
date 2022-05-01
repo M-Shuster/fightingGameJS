@@ -7,6 +7,19 @@
   display: inline-block;
 }
 
+#gameResult {
+  position: absolute;
+  color: #fff;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
 #topBar {
   position: absolute;
   display: flex;
@@ -68,3 +81,4 @@
   left: 0;
   right: 0;
 }
+
