@@ -22,7 +22,7 @@ class Sprite {
         y: this.position.y,
       },
       offsetSword,
-      width: 100,
+      width: 80,
       height: 50,
     }
     this.kickBox = {
@@ -75,6 +75,8 @@ class Sprite {
     setTimeout(() => {
       this.isSwordAttacking = false;
     }, 100);
+  }
+  kickAttack() {
     this.isKickAttacking = true;
     setTimeout(() => {
       this.isKickAttacking = false;
@@ -94,7 +96,7 @@ const Smith = new Sprite({
   position: { x: 924, y: 0 },
   velocity: { x: 0, y: 0 },
   color: 'DarkSalmon',
-  offsetSword: { x: -50, y: 0 },
+  offsetSword: { x: -30, y: 0 },
   offsetKick: { x: -50, y: 100 },
 });
 
@@ -231,7 +233,7 @@ window.addEventListener('keydown', (event) => {
       Neo.attack();
       break;
     case 't':
-      Neo.attack();
+      Neo.kickAttack();
       break;
 
       // Smith Keys
@@ -250,7 +252,7 @@ window.addEventListener('keydown', (event) => {
       Smith.attack();
       break;
     case 'p':
-      Smith.attack();
+      Smith.kickAttack();
       break;
   }
 });
