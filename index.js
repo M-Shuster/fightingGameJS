@@ -32,6 +32,10 @@ const Neo = new Fighter({
   color: 'LemonChiffon',
   offsetSword: { x: 0, y: 0 },
   offsetKick: { x: 0, y: 100 },
+  imageSrc: './Assets/Hero/Idle.png',
+  framesMax: 10,
+  scale: 2.25,
+  offset: { x: 196 , y: 76 },
 });
 
 const Smith = new Fighter({
@@ -66,7 +70,7 @@ function endlessFight() {
   background.update();
   shop.update();
   Neo.update();
-  Smith.update();
+  // Smith.update();
 
   Neo.velocity.x = 0;
   Smith.velocity.x = 0;

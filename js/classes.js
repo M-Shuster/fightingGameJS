@@ -1,5 +1,5 @@
 class Sprite {
-  constructor({ position, imageSrc, scale = 1, framesMax = 1}) {
+  constructor({ position, imageSrc, scale = 1, framesMax = 1, offset = { x: 0, y: 0 } }) {
     this.position = position;
     this.width = 50;
     this.height = 150;
@@ -10,6 +10,7 @@ class Sprite {
     this.framesCurrent = 0;
     this.framesElapsed = 0;
     this.framesHold = 6;
+    this.offset = offset;
     }
 
   draw() {
@@ -19,16 +20,16 @@ class Sprite {
       0,
       this.image.width / this.framesMax,
       this.image.height,
-      this.position.x, 
-      this.position.y, 
+      this.position.x - this.offset.x,
+      this.position.y - this.offset.y, 
       (this.image.width / this.framesMax) * this.scale, 
       this.image.height * this.scale
     );
   }
 
-  update() {
-    this.draw();
+  animateFrames() {
     this.framesElapsed ++;
+
     if(this.framesElapsed % this.framesHold === 0) {
       if (this.framesCurrent < this.framesMax - 1) {
         this.framesCurrent ++;
@@ -37,11 +38,31 @@ class Sprite {
       }
     }
   }
+
+  update() {
+    this.draw();
+    this.animateFrames();
+  }
 };
 
-class Fighter {
-  constructor({ position, velocity, color, offsetSword, offsetKick }) {
-    this.position = position;
+class Fighter extends Sprite {
+  constructor({ position, 
+    velocity, 
+    color, 
+    offsetSword, 
+    offsetKick, 
+    imageSrc, 
+    scale = 1, 
+    framesMax = 1, 
+    offset = { x: 0, y: 0 }
+  }) {
+    super({
+      position,
+      imageSrc,
+      scale,
+      framesMax,
+      offset,
+    })
     this.velocity = velocity;
     this.width = 50;
     this.height = 150;
@@ -68,25 +89,14 @@ class Fighter {
     this.isSwordAttacking;
     this.isKickAttacking;
     this.health = 100;
+    this.framesCurrent = 0;
+    this.framesElapsed = 0;
+    this.framesHold = 6;
   };
-
-  draw() {
-    context.fillStyle = this.color;
-    context.fillRect(this.position.x, this.position.y, this.width, this.height);
-
-    // attack box drawn here
-    if (this.isSwordAttacking) {
-      context.fillStyle = 'dodgerblue';
-      context.fillRect(this.swordBox.position.x, this.swordBox.position.y, this.swordBox.width, this.swordBox.height);
-    }
-    if (this.isKickAttacking) {
-      context.fillStyle = 'gold';
-      context.fillRect(this.kickBox.position.x, this.kickBox.position.y, this.kickBox.width, this.kickBox.height);
-    }
-  }
 
   update() {
     this.draw();
+    this.animateFrames();
     this.swordBox.position.x = this.position.x + this.swordBox.offsetSword.x;
     this.swordBox.position.y = this.position.y
     this.kickBox.position.x = this.position.x + this.kickBox.offsetKick.x;
