@@ -6,84 +6,17 @@ canvas.height = 576;
 
 context.fillRect(0, 0, canvas.width, canvas.height);
 
-const gravity = 0.5;
+const gravity = 0.6;
 
-class Sprite {
-  constructor({ position, velocity, color, offsetSword, offsetKick }) {
-    this.position = position;
-    this.velocity = velocity;
-    this.width = 50;
-    this.height = 150;
-    this.lastKey
-    this.swordBox = {
-      position: {
-        x: this.position.x,
-        y: this.position.y,
-      },
-      offsetSword,
-      width: 80,
-      height: 50,
-    }
-    this.kickBox = {
-      position: {
-        x: this.position.x,
-        y: this.position.y,
-      },
-      offsetKick,
-      width: 100,
-      height: 50,
-    }
-    this.color = color;
-    this.isSwordAttacking;
-    this.isKickAttacking;
-    this.health = 100;
-  };
+const background = new Sprite({
+  position: {
+    x: 0,
+    y: 0,
+  },
+  imageSrc: './Assets/background.png',
+});
 
-  draw() {
-    context.fillStyle = this.color;
-    context.fillRect(this.position.x, this.position.y, this.width, this.height);
-
-    // attack box drawn here
-    if (this.isSwordAttacking) {
-      context.fillStyle = 'dodgerblue';
-      context.fillRect(this.swordBox.position.x, this.swordBox.position.y, this.swordBox.width, this.swordBox.height);
-    }
-    if (this.isKickAttacking) {
-      context.fillStyle = 'gold';
-      context.fillRect(this.kickBox.position.x, this.kickBox.position.y, this.kickBox.width, this.kickBox.height);
-    }
-  }
-
-  update() {
-    this.draw();
-    this.swordBox.position.x = this.position.x + this.swordBox.offsetSword.x;
-    this.swordBox.position.y = this.position.y
-    this.kickBox.position.x = this.position.x + this.kickBox.offsetKick.x;
-    this.kickBox.position.y = this.position.y + 100;
-    this.position.x += this.velocity.x;
-    this.position.y += this.velocity.y;
-
-    if (this.position.y + this.height + this.velocity.y >= canvas.height) {
-      this.velocity.y = 0;
-    } else 
-    this.velocity.y += gravity;
-  }
-
-  attack() {
-    this.isSwordAttacking = true;
-    setTimeout(() => {
-      this.isSwordAttacking = false;
-    }, 100);
-  }
-  kickAttack() {
-    this.isKickAttacking = true;
-    setTimeout(() => {
-      this.isKickAttacking = false;
-    }, 100);
-  }
-}
-
-const Neo = new Sprite({
+const Neo = new Fighter({
   position: { x: 50, y: 0 },
   velocity: { x: 0, y: 0 },
   color: 'LemonChiffon',
@@ -91,7 +24,7 @@ const Neo = new Sprite({
   offsetKick: { x: 0, y: 100 },
 });
 
-const Smith = new Sprite({
+const Smith = new Fighter({
   position: { x: 924, y: 0 },
   velocity: { x: 0, y: 0 },
   color: 'DarkSalmon',
@@ -114,48 +47,13 @@ const keys  = {
   },
 };
 
-function swordCollision({rectangle1, rectangle2}) {
-  return (
-    rectangle1.swordBox.position.x + rectangle1.swordBox.width >= rectangle2.position.x && rectangle1.swordBox.position.x <= rectangle2.position.x + rectangle2.width && rectangle1.swordBox.position.y + rectangle1.swordBox.height >= rectangle2.position.y && rectangle1.swordBox.position.y <= rectangle2.position.y + rectangle2.height && rectangle1.isSwordAttacking)
-}
-
-function kickCollision({rectangle3, rectangle4}) {
-  return (
-    rectangle3.kickBox.position.x + rectangle3.kickBox.width >= rectangle4.position.x && rectangle3.kickBox.position.x <= rectangle4.position.x + rectangle4.width && rectangle3.kickBox.position.y + rectangle3.kickBox.height >= rectangle4.position.y && rectangle3.kickBox.position.y <= rectangle4.position.y + rectangle4.height && rectangle3.isKickAttacking)
-}
-
-function determineWinner({Neo, Smith, timerId}) {
-  clearTimeout(timerId);
-  document.querySelector('#gameResult').style.display = 'flex';
-  if (Neo.health === Smith.health) {
-    document.querySelector('#gameResult').innerHTML = 'Tie, Nobody wins, try harder next time...';
-  } else if (Neo.health > Smith.health) {
-    document.querySelector('#gameResult').innerHTML = 'Neo wins';
-  } else if (Neo.health < Smith.health) {
-    document.querySelector('#gameResult').innerHTML = 'Smith wins';
-  }
-}
-
-let timer = 60;
-let timerId
-function decreaseTimer() {
-  timerId = setTimeout(decreaseTimer, 1000);
-  if (timer > 0) {
-    timer --
-    document.querySelector('#gameTimer').innerHTML = timer;
-  }
-
-  if (timer === 0) {
-    determineWinner ({Neo, Smith, timerId});
-  }
-}
-
 decreaseTimer();
 
 function endlessFight() {
   window.requestAnimationFrame(endlessFight);
   context.fillStyle = '#000';
   context.fillRect(0, 0, canvas.width, canvas.height);
+  background.update();
   Neo.update();
   Smith.update();
 
