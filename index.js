@@ -66,6 +66,32 @@ const Villain = new Fighter({
   color: 'DarkSalmon',
   offsetSword: { x: -30, y: 0 },
   offsetKick: { x: -50, y: 100 },
+  imageSrc: './Assets/Villain/Idle.png',
+  framesMax: 10,
+  scale: 2.25,
+  offset: { x: 180 , y: 36 },
+  sprites: {
+    idle: {
+      imageSrc: './Assets/Villain/Idle.png',
+      framesMax: 10,
+    },
+    run: {
+      imageSrc: './Assets/Villain/Run.png',
+      framesMax: 8,
+    },
+    jump: {
+      imageSrc: './Assets/Villain/Jump.png',
+      framesMax: 3,
+    },
+    fall: {
+      imageSrc: './Assets/Villain/Fall.png',
+      framesMax: 3,
+    },
+    attack1: {
+      imageSrc: './Assets/Villain/Attack1.png',
+      framesMax: 7,
+    },
+  }
 });
 
 const keys  = {
@@ -92,7 +118,7 @@ function endlessFight() {
   background.update();
   shop.update();
   Hero.update();
-  // Villain.update();
+  Villain.update();
 
   Hero.velocity.x = 0;
   Villain.velocity.x = 0;
@@ -109,6 +135,7 @@ function endlessFight() {
     Hero.switchSprite('idle');
   }
 
+  // jumping
   if (Hero.velocity.y < 0) {
     Hero.switchSprite('jump');
   } else if (Hero.velocity.y > 0) {
@@ -118,8 +145,20 @@ function endlessFight() {
   // Villain movement
   if (keys.ArrowLeft.pressed && Villain.lastKey === 'ArrowLeft') {
     Villain.velocity.x = -5;
+    Villain.switchSprite('run');
+    Villain.framesMax = Hero.sprites.run.framesMax;
   } else if (keys.ArrowRight.pressed && Villain.lastKey === 'ArrowRight') {
     Villain.velocity.x = 5;
+    Villain.switchSprite('run');
+  } else {
+    Villain.switchSprite('idle');
+  }
+
+  // jumping
+  if (Villain.velocity.y < 0) {
+    Villain.switchSprite('jump');
+  } else if (Villain.velocity.y > 0) {
+    Villain.switchSprite('fall');
   }
 
   // detect collision
@@ -130,12 +169,12 @@ function endlessFight() {
     console.log('Hero Hit Villain');
   }
 
-  if (kickCollision({rectangle3: Hero, rectangle4: Villain}) && Hero.isKickAttacking) {
-    Hero.isKickAttacking = false;
-    Villain.health -= 10;
-    document.querySelector('#VillainHealth').style.width = Villain.health + '%';
-    console.log('Hero Hit Villain');
-  }
+  // if (kickCollision({rectangle3: Hero, rectangle4: Villain}) && Hero.isKickAttacking) {
+  //   Hero.isKickAttacking = false;
+  //   Villain.health -= 10;
+  //   document.querySelector('#VillainHealth').style.width = Villain.health + '%';
+  //   console.log('Hero Hit Villain');
+  // }
 
   if (swordCollision({rectangle1: Villain, rectangle2: Hero}) && Villain.isSwordAttacking) {
     Villain.isSwordAttacking = false;
@@ -144,12 +183,12 @@ function endlessFight() {
     console.log('Villain Hit Hero');
   }
 
-  if (kickCollision({rectangle3: Villain, rectangle4: Hero}) && Villain.isKickAttacking) {
-    Villain.isKickAttacking = false;
-    Hero.health -= 10;
-    document.querySelector('#HeroHealth').style.width = Hero.health + '%';
-    console.log('Villain Hit Hero');
-  }
+  // if (kickCollision({rectangle3: Villain, rectangle4: Hero}) && Villain.isKickAttacking) {
+  //   Villain.isKickAttacking = false;
+  //   Hero.health -= 10;
+  //   document.querySelector('#HeroHealth').style.width = Hero.health + '%';
+  //   console.log('Villain Hit Hero');
+  // }
 
   // end game based on health
   if (Hero.health <= 0 || Villain.health <= 0) {
@@ -177,9 +216,9 @@ window.addEventListener('keydown', (event) => {
     case 'r':
       Hero.attack();
       break;
-    case 't':
-      Hero.kickAttack();
-      break;
+    // case 't':
+    //   Hero.kickAttack();
+    //   break;
 
       // Villain Keys
     case 'ArrowLeft':
@@ -196,14 +235,13 @@ window.addEventListener('keydown', (event) => {
     case '[':
       Villain.attack();
       break;
-    case 'p':
-      Villain.kickAttack();
-      break;
+    // case 'p':
+    //   Villain.kickAttack();
+    //   break;
   }
 });
 
 window.addEventListener('keyup', (event) => {
-  // console.log(event.key);
   switch (event.key) {
     // Hero Keys
     case 'a':

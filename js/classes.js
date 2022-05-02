@@ -77,18 +77,18 @@ class Fighter extends Sprite {
       width: 80,
       height: 50,
     }
-    this.kickBox = {
-      position: {
-        x: this.position.x,
-        y: this.position.y,
-      },
-      offsetKick,
-      width: 100,
-      height: 50,
-    }
+    // this.kickBox = {
+    //   position: {
+    //     x: this.position.x,
+    //     y: this.position.y,
+    //   },
+    //   offsetKick,
+    //   width: 100,
+    //   height: 50,
+    // }
     this.color = color;
     this.isSwordAttacking;
-    this.isKickAttacking;
+    // this.isKickAttacking;
     this.health = 100;
     this.framesCurrent = 0;
     this.framesElapsed = 0;
@@ -106,8 +106,8 @@ class Fighter extends Sprite {
     this.animateFrames();
     this.swordBox.position.x = this.position.x + this.swordBox.offsetSword.x;
     this.swordBox.position.y = this.position.y
-    this.kickBox.position.x = this.position.x + this.kickBox.offsetKick.x;
-    this.kickBox.position.y = this.position.y + 100;
+    // this.kickBox.position.x = this.position.x + this.kickBox.offsetKick.x;
+    // this.kickBox.position.y = this.position.y + 100;
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
 
@@ -126,12 +126,12 @@ class Fighter extends Sprite {
       this.isSwordAttacking = false;
     }, 100);
   }
-  kickAttack() {
-    this.isKickAttacking = true;
-    setTimeout(() => {
-      this.isKickAttacking = false;
-    }, 100);
-  }
+  // kickAttack() {
+  //   this.isKickAttacking = true;
+  //   setTimeout(() => {
+  //     this.isKickAttacking = false;
+  //   }, 100);
+  // }
 
   switchSprite(sprite) {
     if (this.image === this.sprites.attack1.image && 
