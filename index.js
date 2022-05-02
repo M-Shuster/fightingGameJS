@@ -26,7 +26,7 @@ const shop = new Sprite({
   framesMax: 6,
 });
 
-const Neo = new Fighter({
+const Hero = new Fighter({
   position: { x: 50, y: 0 },
   velocity: { x: 0, y: 0 },
   color: 'LemonChiffon',
@@ -35,10 +35,28 @@ const Neo = new Fighter({
   imageSrc: './Assets/Hero/Idle.png',
   framesMax: 10,
   scale: 2.25,
-  offset: { x: 196 , y: 76 },
+  offset: { x: 120 , y: 76 },
+  sprites: {
+    idle: {
+      imageSrc: './Assets/Hero/Idle.png',
+      framesMax: 10,
+    },
+    run: {
+      imageSrc: './Assets/Hero/Run.png',
+      framesMax: 8,
+    },
+    jump: {
+      imageSrc: './Assets/Hero/Jump.png',
+      framesMax: 3,
+    },
+    fall: {
+      imageSrc: './Assets/Hero/Fall.png',
+      framesMax: 3,
+    }
+  }
 });
 
-const Smith = new Fighter({
+const Villain = new Fighter({
   position: { x: 924, y: 0 },
   velocity: { x: 0, y: 0 },
   color: 'DarkSalmon',
@@ -69,58 +87,69 @@ function endlessFight() {
   context.fillRect(0, 0, canvas.width, canvas.height);
   background.update();
   shop.update();
-  Neo.update();
-  // Smith.update();
+  Hero.update();
+  // Villain.update();
 
-  Neo.velocity.x = 0;
-  Smith.velocity.x = 0;
+  Hero.velocity.x = 0;
+  Villain.velocity.x = 0;
 
-  // Neo movement
-  if (keys.a.pressed && Neo.lastKey === 'a') {
-    Neo.velocity.x = -5;
-  } else if (keys.d.pressed && Neo.lastKey === 'd') {
-    Neo.velocity.x = 5;
-  } 
+  // Hero movement
+  if (keys.a.pressed && Hero.lastKey === 'a') {
+    Hero.velocity.x = -5;
+    Hero.switchSprite('run');
+    Hero.framesMax = Hero.sprites.run.framesMax;
+  } else if (keys.d.pressed && Hero.lastKey === 'd') {
+    Hero.velocity.x = 5;
+    Hero.switchSprite('run');
+  } else {
+    Hero.switchSprite('idle');
+  }
 
-  // Smith movement
-  if (keys.ArrowLeft.pressed && Smith.lastKey === 'ArrowLeft') {
-    Smith.velocity.x = -5;
-  } else if (keys.ArrowRight.pressed && Smith.lastKey === 'ArrowRight') {
-    Smith.velocity.x = 5;
+  if (Hero.velocity.y < 0) {
+    Hero.switchSprite('jump');
+  } else if (Hero.velocity.y > 0) {
+    Hero.switchSprite('fall');
+  }
+
+  // Villain movement
+  if (keys.ArrowLeft.pressed && Villain.lastKey === 'ArrowLeft') {
+    Villain.velocity.x = -5;
+  } else if (keys.ArrowRight.pressed && Villain.lastKey === 'ArrowRight') {
+    Villain.velocity.x = 5;
   }
 
   // detect collision
-  if (swordCollision({rectangle1: Neo, rectangle2: Smith}) && Neo.isSwordAttacking) {
-    Neo.isSwordAttacking = false;
-    Smith.health -= 10;
-    document.querySelector('#SmithHealth').style.width = Smith.health + '%';
-    console.log('Neo Hit Smith');
+  if (swordCollision({rectangle1: Hero, rectangle2: Villain}) && Hero.isSwordAttacking) {
+    Hero.isSwordAttacking = false;
+    Villain.health -= 10;
+    document.querySelector('#VillainHealth').style.width = Villain.health + '%';
+    console.log('Hero Hit Villain');
   }
 
-  if (kickCollision({rectangle3: Neo, rectangle4: Smith}) && Neo.isKickAttacking) {
-    Neo.isKickAttacking = false;
-    Smith.health -= 10;
-    document.querySelector('#SmithHealth').style.width = Smith.health + '%';
-    console.log('Neo Hit Smith');
+  if (kickCollision({rectangle3: Hero, rectangle4: Villain}) && Hero.isKickAttacking) {
+    Hero.isKickAttacking = false;
+    Villain.health -= 10;
+    document.querySelector('#VillainHealth').style.width = Villain.health + '%';
+    console.log('Hero Hit Villain');
   }
 
-  if (swordCollision({rectangle1: Smith, rectangle2: Neo}) && Smith.isSwordAttacking) {
-    Smith.isSwordAttacking = false;
-    Neo.health -= 10;
-    document.querySelector('#NeoHealth').style.width = Neo.health + '%';
-    console.log('Smith Hit Neo');
+  if (swordCollision({rectangle1: Villain, rectangle2: Hero}) && Villain.isSwordAttacking) {
+    Villain.isSwordAttacking = false;
+    Hero.health -= 10;
+    document.querySelector('#HeroHealth').style.width = Hero.health + '%';
+    console.log('Villain Hit Hero');
   }
 
-  if (kickCollision({rectangle3: Smith, rectangle4: Neo}) && Smith.isKickAttacking) {
-    Smith.isKickAttacking = false;
-    Neo.health -= 10;
-    document.querySelector('#NeoHealth').style.width = Neo.health + '%';
-    console.log('Smith Hit Neo');
+  if (kickCollision({rectangle3: Villain, rectangle4: Hero}) && Villain.isKickAttacking) {
+    Villain.isKickAttacking = false;
+    Hero.health -= 10;
+    document.querySelector('#HeroHealth').style.width = Hero.health + '%';
+    console.log('Villain Hit Hero');
   }
 
   // end game based on health
-  if (Neo.health <= 0 || Smith.health <= 0) {
-    determineWinner ({Neo, Smith, timerId});
+  if (Hero.health <= 0 || Villain.health <= 0) {
+    determineWinner ({Hero, Villain, timerId});
   }
 }
 
@@ -129,42 +158,42 @@ endlessFight();
 window.addEventListener('keydown', (event) => {
   switch (event.key) {
 
-    // Neo Keys
+    // Hero Keys
     case 'a':
       keys.a.pressed = true;
-      Neo.lastKey = 'a';
+      Hero.lastKey = 'a';
       break;
     case 'd':
       keys.d.pressed = true;
-      Neo.lastKey = 'd';
+      Hero.lastKey = 'd';
       break;
     case 'w':
-      Neo.velocity.y = -20;
+      Hero.velocity.y = -20;
       break;
     case 'r':
-      Neo.attack();
+      Hero.attack();
       break;
     case 't':
-      Neo.kickAttack();
+      Hero.kickAttack();
       break;
 
-      // Smith Keys
+      // Villain Keys
     case 'ArrowLeft':
       keys.ArrowLeft.pressed = true;
-      Smith.lastKey = 'ArrowLeft';
+      Villain.lastKey = 'ArrowLeft';
       break;
     case 'ArrowRight':
       keys.ArrowRight.pressed = true;
-      Smith.lastKey = 'ArrowRight';
+      Villain.lastKey = 'ArrowRight';
       break;
     case 'ArrowUp':
-      Smith.velocity.y = -20;
+      Villain.velocity.y = -20;
       break;
     case '[':
-      Smith.attack();
+      Villain.attack();
       break;
     case 'p':
-      Smith.kickAttack();
+      Villain.kickAttack();
       break;
   }
 });
@@ -172,7 +201,7 @@ window.addEventListener('keydown', (event) => {
 window.addEventListener('keyup', (event) => {
   // console.log(event.key);
   switch (event.key) {
-    // Neo Keys
+    // Hero Keys
     case 'a':
       keys.a.pressed = false;
       break;
@@ -180,7 +209,7 @@ window.addEventListener('keyup', (event) => {
       keys.d.pressed = false;
       break;
 
-      // Smith Keys
+      // Villain Keys
     case 'ArrowLeft':
       keys.ArrowLeft.pressed = false;
       break;

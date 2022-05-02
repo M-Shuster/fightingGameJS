@@ -8,15 +8,15 @@ function kickCollision({rectangle3, rectangle4}) {
     rectangle3.kickBox.position.x + rectangle3.kickBox.width >= rectangle4.position.x && rectangle3.kickBox.position.x <= rectangle4.position.x + rectangle4.width && rectangle3.kickBox.position.y + rectangle3.kickBox.height >= rectangle4.position.y && rectangle3.kickBox.position.y <= rectangle4.position.y + rectangle4.height && rectangle3.isKickAttacking)
 }
 
-function determineWinner({Neo, Smith, timerId}) {
+function determineWinner({Hero, Villain, timerId}) {
   clearTimeout(timerId);
   document.querySelector('#gameResult').style.display = 'flex';
-  if (Neo.health === Smith.health) {
+  if (Hero.health === Villain.health) {
     document.querySelector('#gameResult').innerHTML = 'Tie, Nobody wins, try harder next time...';
-  } else if (Neo.health > Smith.health) {
-    document.querySelector('#gameResult').innerHTML = 'Neo wins';
-  } else if (Neo.health < Smith.health) {
-    document.querySelector('#gameResult').innerHTML = 'Smith wins';
+  } else if (Hero.health > Villain.health) {
+    document.querySelector('#gameResult').innerHTML = 'Hero wins';
+  } else if (Hero.health < Villain.health) {
+    document.querySelector('#gameResult').innerHTML = 'Villain wins';
   }
 }
 
@@ -30,6 +30,6 @@ function decreaseTimer() {
   }
 
   if (timer === 0) {
-    determineWinner ({Neo, Smith, timerId});
+    determineWinner ({Hero, Villain, timerId});
   }
 }
