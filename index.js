@@ -52,7 +52,11 @@ const Hero = new Fighter({
     fall: {
       imageSrc: './Assets/Hero/Fall.png',
       framesMax: 3,
-    }
+    },
+    attack1: {
+      imageSrc: './Assets/Hero/Attack1.png',
+      framesMax: 7,
+    },
   }
 });
 
