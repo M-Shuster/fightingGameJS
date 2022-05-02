@@ -27,11 +27,8 @@ const shop = new Sprite({
 });
 
 const Hero = new Fighter({
-  position: { x: 50, y: 0 },
+  position: { x: 0, y: 0 },
   velocity: { x: 0, y: 0 },
-  color: 'LemonChiffon',
-  offsetSword: { x: 0, y: 0 },
-  offsetKick: { x: 0, y: 100 },
   imageSrc: './Assets/Hero/Idle.png',
   framesMax: 10,
   scale: 2.25,
@@ -57,15 +54,20 @@ const Hero = new Fighter({
       imageSrc: './Assets/Hero/Attack1.png',
       framesMax: 7,
     },
+  },
+  swordBox: {
+    offset: {
+      x: 120,
+      y: 70,
+    },
+    width: 80,
+    height: 50,
   }
 });
 
 const Villain = new Fighter({
   position: { x: 924, y: 0 },
   velocity: { x: 0, y: 0 },
-  color: 'DarkSalmon',
-  offsetSword: { x: -30, y: 0 },
-  offsetKick: { x: -50, y: 100 },
   imageSrc: './Assets/Villain/Idle.png',
   framesMax: 10,
   scale: 2.25,
@@ -91,6 +93,14 @@ const Villain = new Fighter({
       imageSrc: './Assets/Villain/Attack1.png',
       framesMax: 7,
     },
+  },
+  swordBox: {
+    offset: {
+      x: -175,
+      y: 80,
+    },
+    width: 100,
+    height: 60,
   }
 });
 
@@ -162,12 +172,22 @@ function endlessFight() {
   }
 
   // detect collision
-  if (swordCollision({rectangle1: Hero, rectangle2: Villain}) && Hero.isSwordAttacking) {
+  if (swordCollision({
+    rectangle1: Hero, 
+    rectangle2: Villain,
+  }) && 
+  Hero.isSwordAttacking && 
+  Hero.framesCurrent === 4) {
     Hero.isSwordAttacking = false;
     Villain.health -= 10;
     document.querySelector('#VillainHealth').style.width = Villain.health + '%';
     console.log('Hero Hit Villain');
   }
+
+  // if Hero misses
+  if (Hero.isSwordAttacking && Hero.framesCurrent === 4) {
+    Hero.isSwordAttacking = false;
+  };
 
   // if (kickCollision({rectangle3: Hero, rectangle4: Villain}) && Hero.isKickAttacking) {
   //   Hero.isKickAttacking = false;
@@ -176,12 +196,22 @@ function endlessFight() {
   //   console.log('Hero Hit Villain');
   // }
 
-  if (swordCollision({rectangle1: Villain, rectangle2: Hero}) && Villain.isSwordAttacking) {
+  if (swordCollision({
+    rectangle1: Villain,
+    rectangle2: Hero,
+    }) && 
+  Villain.isSwordAttacking && 
+  Villain.framesCurrent === 3) {
     Villain.isSwordAttacking = false;
     Hero.health -= 10;
     document.querySelector('#HeroHealth').style.width = Hero.health + '%';
     console.log('Villain Hit Hero');
   }
+
+   // if Villain misses
+   if (Villain.isSwordAttacking && Villain.framesCurrent === 3) {
+    Villain.isSwordAttacking = false;
+  };
 
   // if (kickCollision({rectangle3: Villain, rectangle4: Hero}) && Villain.isKickAttacking) {
   //   Villain.isKickAttacking = false;

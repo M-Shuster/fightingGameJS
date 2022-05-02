@@ -49,7 +49,7 @@ class Fighter extends Sprite {
   constructor({ position, 
     velocity, 
     color, 
-    offsetSword, 
+    swordBox = { offset: {}, width: undefined, height: undefined }, 
     offsetKick, 
     imageSrc, 
     scale = 1, 
@@ -73,9 +73,9 @@ class Fighter extends Sprite {
         x: this.position.x,
         y: this.position.y,
       },
-      offsetSword,
-      width: 80,
-      height: 50,
+      offsetSword: swordBox.offset,
+      width: swordBox.width,
+      height: swordBox.height,
     }
     // this.kickBox = {
     //   position: {
@@ -105,7 +105,11 @@ class Fighter extends Sprite {
     this.draw();
     this.animateFrames();
     this.swordBox.position.x = this.position.x + this.swordBox.offsetSword.x;
-    this.swordBox.position.y = this.position.y
+    this.swordBox.position.y = this.position.y + this.swordBox.offsetSword.y;
+    
+    // draw sword swing box
+    // context.fillRect(this.swordBox.position.x, this.swordBox.position.y, this.swordBox.width, this.swordBox.height);
+    
     // this.kickBox.position.x = this.position.x + this.kickBox.offsetKick.x;
     // this.kickBox.position.y = this.position.y + 100;
     this.position.x += this.velocity.x;
@@ -122,9 +126,6 @@ class Fighter extends Sprite {
   attack() {
     this.switchSprite('attack1');
     this.isSwordAttacking = true;
-    setTimeout(() => {
-      this.isSwordAttacking = false;
-    }, 100);
   }
   // kickAttack() {
   //   this.isKickAttacking = true;
