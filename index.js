@@ -16,6 +16,16 @@ const background = new Sprite({
   imageSrc: './Assets/background.png',
 });
 
+const shop = new Sprite({
+  position: {
+    x: 620,
+    y: 160,
+  },
+  imageSrc: './Assets/shop.png',
+  scale: 2.5,
+  framesMax: 6,
+});
+
 const Neo = new Fighter({
   position: { x: 50, y: 0 },
   velocity: { x: 0, y: 0 },
@@ -54,6 +64,7 @@ function endlessFight() {
   context.fillStyle = '#000';
   context.fillRect(0, 0, canvas.width, canvas.height);
   background.update();
+  shop.update();
   Neo.update();
   Smith.update();
 
