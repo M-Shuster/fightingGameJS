@@ -54,6 +54,10 @@ const Hero = new Fighter({
       imageSrc: './Assets/Hero/Attack1.png',
       framesMax: 7,
     },
+    takeHit: {
+      imageSrc: './Assets/Hero/TakeHit.png',
+      framesMax: 3,
+    },
   },
   swordBox: {
     offset: {
@@ -93,6 +97,11 @@ const Villain = new Fighter({
       imageSrc: './Assets/Villain/Attack1.png',
       framesMax: 7,
     },
+    takeHit: {
+      imageSrc: './Assets/Villain/TakeHit.png',
+      framesMax: 3,
+    },
+
   },
   swordBox: {
     offset: {
@@ -171,15 +180,15 @@ function endlessFight() {
     Villain.switchSprite('fall');
   }
 
-  // detect collision
+  // detect collision & enemy gets hit
   if (swordCollision({
     rectangle1: Hero, 
     rectangle2: Villain,
   }) && 
   Hero.isSwordAttacking && 
   Hero.framesCurrent === 4) {
+    Villain.takeHit();
     Hero.isSwordAttacking = false;
-    Villain.health -= 10;
     document.querySelector('#VillainHealth').style.width = Villain.health + '%';
     console.log('Hero Hit Villain');
   }
@@ -202,8 +211,8 @@ function endlessFight() {
     }) && 
   Villain.isSwordAttacking && 
   Villain.framesCurrent === 3) {
+    Hero.takeHit();
     Villain.isSwordAttacking = false;
-    Hero.health -= 10;
     document.querySelector('#HeroHealth').style.width = Hero.health + '%';
     console.log('Villain Hit Hero');
   }
