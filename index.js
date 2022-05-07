@@ -222,7 +222,7 @@ function endlessFight() {
     rectangle2: Hero,
     }) && 
   Villain.isSwordAttacking && 
-  Villain.framesCurrent === 3) {
+  Villain.framesCurrent === 2) {
     Hero.takeHit();
     Villain.isSwordAttacking = false;
 
