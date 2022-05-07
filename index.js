@@ -58,6 +58,10 @@ const Hero = new Fighter({
       imageSrc: './Assets/Hero/TakeHit.png',
       framesMax: 3,
     },
+    death: {
+      imageSrc: './Assets/Hero/Death.png',
+      framesMax: 7,
+    },
   },
   swordBox: {
     offset: {
@@ -73,13 +77,13 @@ const Villain = new Fighter({
   position: { x: 924, y: 0 },
   velocity: { x: 0, y: 0 },
   imageSrc: './Assets/Villain/Idle.png',
-  framesMax: 10,
-  scale: 2.25,
-  offset: { x: 180 , y: 36 },
+  framesMax: 4,
+  scale: 2.0,
+  offset: { x: 180 , y: 105 },
   sprites: {
     idle: {
       imageSrc: './Assets/Villain/Idle.png',
-      framesMax: 10,
+      framesMax: 4,
     },
     run: {
       imageSrc: './Assets/Villain/Run.png',
@@ -87,19 +91,23 @@ const Villain = new Fighter({
     },
     jump: {
       imageSrc: './Assets/Villain/Jump.png',
-      framesMax: 3,
+      framesMax: 2,
     },
     fall: {
       imageSrc: './Assets/Villain/Fall.png',
-      framesMax: 3,
+      framesMax: 2,
     },
     attack1: {
       imageSrc: './Assets/Villain/Attack1.png',
-      framesMax: 7,
+      framesMax: 4,
     },
     takeHit: {
       imageSrc: './Assets/Villain/TakeHit.png',
       framesMax: 3,
+    },
+    death: {
+      imageSrc: './Assets/Villain/Death.png',
+      framesMax: 7,
     },
 
   },
