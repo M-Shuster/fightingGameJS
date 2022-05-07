@@ -246,6 +246,8 @@ function endlessFight() {
 endlessFight();
 
 window.addEventListener('keydown', (event) => {
+  if (!Hero.dead) {
+  }
   switch (event.key) {
 
     // Hero Keys
@@ -266,8 +268,11 @@ window.addEventListener('keydown', (event) => {
     // case 't':
     //   Hero.kickAttack();
     //   break;
+  }
 
-      // Villain Keys
+if(!Villain.dead) {
+  switch (event.key) {
+    // Villain Keys
     case 'ArrowLeft':
       keys.ArrowLeft.pressed = true;
       Villain.lastKey = 'ArrowLeft';
@@ -286,6 +291,7 @@ window.addEventListener('keydown', (event) => {
     //   Villain.kickAttack();
     //   break;
   }
+}
 });
 
 window.addEventListener('keyup', (event) => {
