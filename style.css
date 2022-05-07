@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'pressStart';
+  src: url(./Assets/PressStart2P-Regular.ttf);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -8,6 +13,7 @@
 }
 
 #gameResult {
+  font-family: 'pressStart', sans-serif;
   position: absolute;
   color: #fff;
   font-weight: bold;
@@ -32,7 +38,7 @@
   background-color: #000;
   border: solid 3px darkgoldenrod;
   color: darkgoldenrod;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'pressStart', sans-serif;
   font-size: 20px;
   font-weight: bold;
   border-radius: 3px;
@@ -47,7 +53,6 @@
 
 #HeroHealthContainer {
   position: relative;
-  height: 30px;
   width: 100%;
   display: flex;
   justify-content: flex-end;
@@ -67,7 +72,6 @@
 
 #VillainHealthContainer {
   position: relative;
-  height: 30px;
   width: 100%;
 }
 

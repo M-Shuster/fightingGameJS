@@ -144,6 +144,8 @@ function endlessFight() {
   context.fillRect(0, 0, canvas.width, canvas.height);
   background.update();
   shop.update();
+  context.fillStyle = 'rgba(255, 255, 255, 0.1)';
+  context.fillRect(0, 0, canvas.width, canvas.height);
   Hero.update();
   Villain.update();
 
@@ -197,7 +199,9 @@ function endlessFight() {
   Hero.framesCurrent === 4) {
     Villain.takeHit();
     Hero.isSwordAttacking = false;
-    document.querySelector('#VillainHealth').style.width = Villain.health + '%';
+    gsap.to('#VillainHealth', {
+      width: Villain.health + '%'
+    });
     console.log('Hero Hit Villain');
   }
 
@@ -221,7 +225,10 @@ function endlessFight() {
   Villain.framesCurrent === 3) {
     Hero.takeHit();
     Villain.isSwordAttacking = false;
-    document.querySelector('#HeroHealth').style.width = Hero.health + '%';
+
+    gsap.to('#HeroHealth', {
+      width: Hero.health + '%'
+    });
     console.log('Villain Hit Hero');
   }
 
