@@ -28,7 +28,7 @@
   padding: 20px;
 }
 
-#NeoHealthContainer {
+#HeroHealthContainer {
   position: relative;
   height: 30px;
   width: 100%;
@@ -36,7 +36,7 @@
   justify-content: flex-end;
 }
 
-#NeoHealth {
+#HeroHealth {
   position: absolute;
   background-color: #0000ff;
   height: 20px;
@@ -57,7 +57,7 @@
   align-items: center;
 }
 
-#SmithHealthContainer {
+#VillainHealthContainer {
   position: relative;
   height: 30px;
   width: 100%;
@@ -70,7 +70,7 @@
   width: 100%;
 }
 
-#SmithHealth {
+#VillainHealth {
   position: absolute;
   background-color: #0000ff;
   height: 20px;

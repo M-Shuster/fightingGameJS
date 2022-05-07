@@ -6,98 +6,119 @@ canvas.height = 576;
 
 context.fillRect(0, 0, canvas.width, canvas.height);
 
-const gravity = 0.5;
+const gravity = 0.6;
 
-class Sprite {
-  constructor({ position, velocity, color, offsetSword, offsetKick }) {
-    this.position = position;
-    this.velocity = velocity;
-    this.width = 50;
-    this.height = 150;
-    this.lastKey
-    // add kicking to this later and change this to punch/sword attack
-    this.swordBox = {
-      position: {
-        x: this.position.x,
-        y: this.position.y,
-      },
-      offsetSword,
-      width: 80,
-      height: 50,
-    }
-    this.kickBox = {
-      position: {
-        x: this.position.x,
-        y: this.position.y,
-      },
-      offsetKick,
-      width: 100,
-      height: 50,
-    }
-    this.color = color;
-    this.isSwordAttacking;
-    this.isKickAttacking;
-    this.health = 100;
-  };
-
-  draw() {
-    context.fillStyle = this.color;
-    context.fillRect(this.position.x, this.position.y, this.width, this.height);
-
-    // attack box drawn here
-    if (this.isSwordAttacking) {
-      context.fillStyle = 'dodgerblue';
-      context.fillRect(this.swordBox.position.x, this.swordBox.position.y, this.swordBox.width, this.swordBox.height);
-    }
-    if (this.isKickAttacking) {
-      context.fillStyle = 'gold';
-      context.fillRect(this.kickBox.position.x, this.kickBox.position.y, this.kickBox.width, this.kickBox.height);
-    }
-  }
-
-  update() {
-    this.draw();
-    this.swordBox.position.x = this.position.x + this.swordBox.offsetSword.x;
-    this.swordBox.position.y = this.position.y
-    this.kickBox.position.x = this.position.x + this.kickBox.offsetKick.x;
-    this.kickBox.position.y = this.position.y + 100;
-    this.position.x += this.velocity.x;
-    this.position.y += this.velocity.y;
-
-    if (this.position.y + this.height + this.velocity.y >= canvas.height) {
-      this.velocity.y = 0;
-    } else 
-    this.velocity.y += gravity;
-  }
-
-  attack() {
-    this.isSwordAttacking = true;
-    setTimeout(() => {
-      this.isSwordAttacking = false;
-    }, 100);
-  }
-  kickAttack() {
-    this.isKickAttacking = true;
-    setTimeout(() => {
-      this.isKickAttacking = false;
-    }, 100);
-  }
-}
-
-const Neo = new Sprite({
-  position: { x: 50, y: 0 },
-  velocity: { x: 0, y: 0 },
-  color: 'LemonChiffon',
-  offsetSword: { x: 0, y: 0 },
-  offsetKick: { x: 0, y: 100 },
+const background = new Sprite({
+  position: {
+    x: 0,
+    y: 0,
+  },
+  imageSrc: './Assets/background.png',
 });
 
-const Smith = new Sprite({
+const shop = new Sprite({
+  position: {
+    x: 620,
+    y: 160,
+  },
+  imageSrc: './Assets/shop.png',
+  scale: 2.5,
+  framesMax: 6,
+});
+
+const Hero = new Fighter({
+  position: { x: 0, y: 0 },
+  velocity: { x: 0, y: 0 },
+  imageSrc: './Assets/Hero/Idle.png',
+  framesMax: 10,
+  scale: 2.25,
+  offset: { x: 120 , y: 76 },
+  sprites: {
+    idle: {
+      imageSrc: './Assets/Hero/Idle.png',
+      framesMax: 10,
+    },
+    run: {
+      imageSrc: './Assets/Hero/Run.png',
+      framesMax: 8,
+    },
+    jump: {
+      imageSrc: './Assets/Hero/Jump.png',
+      framesMax: 3,
+    },
+    fall: {
+      imageSrc: './Assets/Hero/Fall.png',
+      framesMax: 3,
+    },
+    attack1: {
+      imageSrc: './Assets/Hero/Attack1.png',
+      framesMax: 7,
+    },
+    takeHit: {
+      imageSrc: './Assets/Hero/TakeHit.png',
+      framesMax: 3,
+    },
+    death: {
+      imageSrc: './Assets/Hero/Death.png',
+      framesMax: 7,
+    },
+  },
+  swordBox: {
+    offset: {
+      x: 120,
+      y: 70,
+    },
+    width: 80,
+    height: 50,
+  }
+});
+
+const Villain = new Fighter({
   position: { x: 924, y: 0 },
   velocity: { x: 0, y: 0 },
-  color: 'DarkSalmon',
-  offsetSword: { x: -30, y: 0 },
-  offsetKick: { x: -50, y: 100 },
+  imageSrc: './Assets/Villain/Idle.png',
+  framesMax: 4,
+  scale: 2.0,
+  offset: { x: 180 , y: 105 },
+  sprites: {
+    idle: {
+      imageSrc: './Assets/Villain/Idle.png',
+      framesMax: 4,
+    },
+    run: {
+      imageSrc: './Assets/Villain/Run.png',
+      framesMax: 8,
+    },
+    jump: {
+      imageSrc: './Assets/Villain/Jump.png',
+      framesMax: 2,
+    },
+    fall: {
+      imageSrc: './Assets/Villain/Fall.png',
+      framesMax: 2,
+    },
+    attack1: {
+      imageSrc: './Assets/Villain/Attack1.png',
+      framesMax: 4,
+    },
+    takeHit: {
+      imageSrc: './Assets/Villain/TakeHit.png',
+      framesMax: 3,
+    },
+    death: {
+      imageSrc: './Assets/Villain/Death.png',
+      framesMax: 7,
+    },
+
+  },
+  swordBox: {
+    offset: {
+      x: -175,
+      y: 80,
+    },
+    width: 100,
+    height: 60,
+  }
 });
 
 const keys  = {
@@ -115,152 +136,167 @@ const keys  = {
   },
 };
 
-function swordCollision({rectangle1, rectangle2}) {
-  return (
-    rectangle1.swordBox.position.x + rectangle1.swordBox.width >= rectangle2.position.x && rectangle1.swordBox.position.x <= rectangle2.position.x + rectangle2.width && rectangle1.swordBox.position.y + rectangle1.swordBox.height >= rectangle2.position.y && rectangle1.swordBox.position.y <= rectangle2.position.y + rectangle2.height && rectangle1.isSwordAttacking)
-}
-
-function kickCollision({rectangle3, rectangle4}) {
-  return (
-    rectangle3.kickBox.position.x + rectangle3.kickBox.width >= rectangle4.position.x && rectangle3.kickBox.position.x <= rectangle4.position.x + rectangle4.width && rectangle3.kickBox.position.y + rectangle3.kickBox.height >= rectangle4.position.y && rectangle3.kickBox.position.y <= rectangle4.position.y + rectangle4.height && rectangle3.isKickAttacking)
-}
-
-function determineWinner({Neo, Smith, timerId}) {
-  clearTimeout(timerId);
-  document.querySelector('#gameResult').style.display = 'flex';
-  if (Neo.health === Smith.health) {
-    document.querySelector('#gameResult').innerHTML = 'Tie, Nobody wins, try harder next time...';
-  } else if (Neo.health > Smith.health) {
-    document.querySelector('#gameResult').innerHTML = 'Neo wins';
-  } else if (Neo.health < Smith.health) {
-    document.querySelector('#gameResult').innerHTML = 'Smith wins';
-  }
-}
-
-let timer = 60;
-let timerId
-function decreaseTimer() {
-  timerId = setTimeout(decreaseTimer, 1000);
-  if (timer > 0) {
-    timer --
-    document.querySelector('#gameTimer').innerHTML = timer;
-  }
-
-  if (timer === 0) {
-    determineWinner ({Neo, Smith, timerId});
-  }
-}
-
 decreaseTimer();
 
 function endlessFight() {
   window.requestAnimationFrame(endlessFight);
   context.fillStyle = '#000';
   context.fillRect(0, 0, canvas.width, canvas.height);
-  Neo.update();
-  Smith.update();
+  background.update();
+  shop.update();
+  Hero.update();
+  Villain.update();
 
-  Neo.velocity.x = 0;
-  Smith.velocity.x = 0;
+  Hero.velocity.x = 0;
+  Villain.velocity.x = 0;
 
-  // Neo movement
-  if (keys.a.pressed && Neo.lastKey === 'a') {
-    Neo.velocity.x = -5;
-  } else if (keys.d.pressed && Neo.lastKey === 'd') {
-    Neo.velocity.x = 5;
-  } 
-
-  // Smith movement
-  if (keys.ArrowLeft.pressed && Smith.lastKey === 'ArrowLeft') {
-    Smith.velocity.x = -5;
-  } else if (keys.ArrowRight.pressed && Smith.lastKey === 'ArrowRight') {
-    Smith.velocity.x = 5;
+  // Hero movement
+  if (keys.a.pressed && Hero.lastKey === 'a') {
+    Hero.velocity.x = -5;
+    Hero.switchSprite('run');
+    Hero.framesMax = Hero.sprites.run.framesMax;
+  } else if (keys.d.pressed && Hero.lastKey === 'd') {
+    Hero.velocity.x = 5;
+    Hero.switchSprite('run');
+  } else {
+    Hero.switchSprite('idle');
   }
 
-  // detect collision
-  if (swordCollision({rectangle1: Neo, rectangle2: Smith}) && Neo.isSwordAttacking) {
-    Neo.isSwordAttacking = false;
-    Smith.health -= 10;
-    document.querySelector('#SmithHealth').style.width = Smith.health + '%';
-    console.log('Neo Hit Smith');
+  // jumping
+  if (Hero.velocity.y < 0) {
+    Hero.switchSprite('jump');
+  } else if (Hero.velocity.y > 0) {
+    Hero.switchSprite('fall');
   }
 
-  if (kickCollision({rectangle3: Neo, rectangle4: Smith}) && Neo.isKickAttacking) {
-    Neo.isKickAttacking = false;
-    Smith.health -= 10;
-    document.querySelector('#SmithHealth').style.width = Smith.health + '%';
-    console.log('Neo Hit Smith');
+  // Villain movement
+  if (keys.ArrowLeft.pressed && Villain.lastKey === 'ArrowLeft') {
+    Villain.velocity.x = -5;
+    Villain.switchSprite('run');
+    Villain.framesMax = Hero.sprites.run.framesMax;
+  } else if (keys.ArrowRight.pressed && Villain.lastKey === 'ArrowRight') {
+    Villain.velocity.x = 5;
+    Villain.switchSprite('run');
+  } else {
+    Villain.switchSprite('idle');
   }
 
-  if (swordCollision({rectangle1: Smith, rectangle2: Neo}) && Smith.isSwordAttacking) {
-    Smith.isSwordAttacking = false;
-    Neo.health -= 10;
-    document.querySelector('#NeoHealth').style.width = Neo.health + '%';
-    console.log('Smith Hit Neo');
+  // jumping
+  if (Villain.velocity.y < 0) {
+    Villain.switchSprite('jump');
+  } else if (Villain.velocity.y > 0) {
+    Villain.switchSprite('fall');
   }
 
-  if (kickCollision({rectangle3: Smith, rectangle4: Neo}) && Smith.isKickAttacking) {
-    Smith.isKickAttacking = false;
-    Neo.health -= 10;
-    document.querySelector('#NeoHealth').style.width = Neo.health + '%';
-    console.log('Smith Hit Neo');
+  // detect collision & enemy gets hit
+  if (swordCollision({
+    rectangle1: Hero, 
+    rectangle2: Villain,
+  }) && 
+  Hero.isSwordAttacking && 
+  Hero.framesCurrent === 4) {
+    Villain.takeHit();
+    Hero.isSwordAttacking = false;
+    document.querySelector('#VillainHealth').style.width = Villain.health + '%';
+    console.log('Hero Hit Villain');
   }
+
+  // if Hero misses
+  if (Hero.isSwordAttacking && Hero.framesCurrent === 4) {
+    Hero.isSwordAttacking = false;
+  };
+
+  // if (kickCollision({rectangle3: Hero, rectangle4: Villain}) && Hero.isKickAttacking) {
+  //   Hero.isKickAttacking = false;
+  //   Villain.health -= 10;
+  //   document.querySelector('#VillainHealth').style.width = Villain.health + '%';
+  //   console.log('Hero Hit Villain');
+  // }
+
+  if (swordCollision({
+    rectangle1: Villain,
+    rectangle2: Hero,
+    }) && 
+  Villain.isSwordAttacking && 
+  Villain.framesCurrent === 3) {
+    Hero.takeHit();
+    Villain.isSwordAttacking = false;
+    document.querySelector('#HeroHealth').style.width = Hero.health + '%';
+    console.log('Villain Hit Hero');
+  }
+
+   // if Villain misses
+   if (Villain.isSwordAttacking && Villain.framesCurrent === 3) {
+    Villain.isSwordAttacking = false;
+  };
+
+  // if (kickCollision({rectangle3: Villain, rectangle4: Hero}) && Villain.isKickAttacking) {
+  //   Villain.isKickAttacking = false;
+  //   Hero.health -= 10;
+  //   document.querySelector('#HeroHealth').style.width = Hero.health + '%';
+  //   console.log('Villain Hit Hero');
+  // }
 
   // end game based on health
-  if (Neo.health <= 0 || Smith.health <= 0) {
-    determineWinner ({Neo, Smith, timerId});
+  if (Hero.health <= 0 || Villain.health <= 0) {
+    determineWinner ({Hero, Villain, timerId});
   }
 }
 
 endlessFight();
 
 window.addEventListener('keydown', (event) => {
+  if (!Hero.dead) {
+  }
   switch (event.key) {
 
-    // Neo Keys
+    // Hero Keys
     case 'a':
       keys.a.pressed = true;
-      Neo.lastKey = 'a';
+      Hero.lastKey = 'a';
       break;
     case 'd':
       keys.d.pressed = true;
-      Neo.lastKey = 'd';
+      Hero.lastKey = 'd';
       break;
     case 'w':
-      Neo.velocity.y = -20;
+      Hero.velocity.y = -20;
       break;
     case 'r':
-      Neo.attack();
+      Hero.attack();
       break;
-    case 't':
-      Neo.kickAttack();
-      break;
+    // case 't':
+    //   Hero.kickAttack();
+    //   break;
+  }
 
-      // Smith Keys
+if(!Villain.dead) {
+  switch (event.key) {
+    // Villain Keys
     case 'ArrowLeft':
       keys.ArrowLeft.pressed = true;
-      Smith.lastKey = 'ArrowLeft';
+      Villain.lastKey = 'ArrowLeft';
       break;
     case 'ArrowRight':
       keys.ArrowRight.pressed = true;
-      Smith.lastKey = 'ArrowRight';
+      Villain.lastKey = 'ArrowRight';
       break;
     case 'ArrowUp':
-      Smith.velocity.y = -20;
+      Villain.velocity.y = -20;
       break;
     case '[':
-      Smith.attack();
+      Villain.attack();
       break;
-    case 'p':
-      Smith.kickAttack();
-      break;
+    // case 'p':
+    //   Villain.kickAttack();
+    //   break;
   }
+}
 });
 
 window.addEventListener('keyup', (event) => {
-  // console.log(event.key);
   switch (event.key) {
-    // Neo Keys
+    // Hero Keys
     case 'a':
       keys.a.pressed = false;
       break;
@@ -268,7 +304,7 @@ window.addEventListener('keyup', (event) => {
       keys.d.pressed = false;
       break;
 
-      // Smith Keys
+      // Villain Keys
     case 'ArrowLeft':
       keys.ArrowLeft.pressed = false;
       break;
