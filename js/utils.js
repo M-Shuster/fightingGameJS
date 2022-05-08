@@ -30,7 +30,7 @@ function determineWinner({Hero, Villain, timerId}) {
   }
 }
 
-let timer = 10;
+let timer = 60;
 let timerId
 function decreaseTimer() {
   timerId = setTimeout(decreaseTimer, 1000);
