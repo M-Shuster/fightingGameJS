@@ -222,7 +222,7 @@ function endlessFight() {
     rectangle2: Hero,
     }) && 
   Villain.isSwordAttacking && 
-  Villain.framesCurrent === 3) {
+  Villain.framesCurrent === 2) {
     Hero.takeHit();
     Villain.isSwordAttacking = false;
 
@@ -267,7 +267,7 @@ window.addEventListener('keydown', (event) => {
       Hero.lastKey = 'd';
       break;
     case 'w':
-      Hero.velocity.y = -20;
+      Hero.jump();
       break;
     case 'r':
       Hero.attack();
@@ -289,7 +289,7 @@ if(!Villain.dead) {
       Villain.lastKey = 'ArrowRight';
       break;
     case 'ArrowUp':
-      Villain.velocity.y = -20;
+      Villain.jump();
       break;
     case '[':
       Villain.attack();

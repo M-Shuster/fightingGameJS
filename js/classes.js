@@ -144,6 +144,14 @@ class Fighter extends Sprite {
       this.switchSprite('takeHit'); 
   }
 
+  jump() {
+    this.velocity.y = -20;
+    
+    if (this.position.y < 330) {
+      this.velocity.y = 0;
+    }
+  }
+
   switchSprite(sprite) {
     if (this.image === this.sprites.death.image) {
       if (this.framesCurrent === this.sprites.death.framesMax - 1)
