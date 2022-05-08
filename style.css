@@ -26,6 +26,23 @@
   width: 100%;
 }
 
+#replayButton {
+  font-family: 'pressStart', sans-serif;
+  font-size: 14px;
+  padding: 5px;
+  position: absolute;
+  color: #fff;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: none;
+  /* align-items: center;
+  justify-content: center; */
+  top: 92%;
+  left: 45.5%;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
 #topBar {
   position: absolute;
   display: flex;
